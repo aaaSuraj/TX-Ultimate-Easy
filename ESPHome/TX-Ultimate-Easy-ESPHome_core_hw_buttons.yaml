@@ -37,25 +37,63 @@ substitutions:
   BUTTON_4_ID: '4'
 
 binary_sensor:
-  - &binary_sensor_button_base
-    id: bs_button_2
-    name: Button 2
+  - platform: gpio
+    id: bs_button_1_raw
+    name: Button 1 (Raw)
+    internal: True
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_1_press
+    on_release:
+      - script.execute: sc_button_1_release
+
+  - platform: template
+    id: bs_button_1
+    name: Button 1 (Virtual)
+    internal: False
     icon: mdi:gesture-tap-box
-    platform: template
-    internal: true
+    lambda: |-
+      return id(bs_button_1_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 1 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 1 (Virtual) was released"
 
-  - id: bs_button_3
-    name: Button 3
-    <<: *binary_sensor_button_base
+  - platform: gpio
+    id: bs_button_2_raw
+    name: Button 2 (Raw)
+    internal: True
+    pin:
+      number: GPIO35
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_2_press
+    on_release:
+      - script.execute: sc_button_2_release
 
-  - id: bs_button_4
-    name: Button 4
-    <<: *binary_sensor_button_base
-
-  - id: bs_button_1
-    name: Button 1
-    internal: false
-    <<: *binary_sensor_button_base
+  - platform: template
+    id: bs_button_2
+    name: Button 2 (Virtual)
+    internal: False
+    icon: mdi:gesture-tap-box
+    lambda: |-
+      return id(bs_button_2_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 2 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 2 (Virtual) was released"
 
 esphome:
   platformio_options:
