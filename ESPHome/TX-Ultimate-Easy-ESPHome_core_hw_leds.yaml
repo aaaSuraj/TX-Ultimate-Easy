@@ -53,7 +53,7 @@ light:
     pin: GPIO13
     restore_mode: RESTORE_DEFAULT_OFF
     max_refresh_rate: 33ms
-    use_psram: True
+    use_psram: False
 
   # Those lights are available based on the model selections
   - &light_partition_with_effects
