@@ -28,13 +28,17 @@ esphome:
 i2s_audio: !remove
 
 light:
-  - id: !extend light_full
-    platform: esp32_rmt_led_strip
+  - platform: esp32_rmt_led_strip
+    id: light_full
+    name: Light - All
+    internal: True
     rgb_order: GRB
-    # rmt_channel: 1  # Not supported with IDF 5
     chipset: ws2812
+    num_leds: 32
+    pin: GPIO13
+    restore_mode: RESTORE_DEFAULT_OFF
     max_refresh_rate: 33ms
-    use_psram: false
+    use_psram: False
 
 media_player: !remove
 
