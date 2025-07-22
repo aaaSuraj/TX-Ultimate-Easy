@@ -1,41 +1,3 @@
-####################################################################################################
-#####                              TX Ultimate Easy for ESPHome                                #####
-#####                  Repository: https://github.com/edwardtfn/TX-Ultimate-Easy               #####
-####################################################################################################
-##### Purpose: ESPHome Core - Hardware - Buttons                                               #####
-####################################################################################################
-##### Author: edwardtfn - https://github.com/edwardtfn - https://buymeacoffee.com/edwardfirmo  #####
-####################################################################################################
-##### NOTE:                                                                                    #####
-##### - Make changes ONLY if absolutely necessary and you have the required knowledge.         #####
-##### - For normal system use, modifications to this file are NOT required.                    #####
-####################################################################################################
----
-substitutions:
-  invalid_cooldown: 100ms
-
-  BUTTON_ACTION_NONE_TEXT: "None"
-  BUTTON_1_ACTION_TEXT: "Relay 1 (toggle)"
-  BUTTON_2_ACTION_TEXT: "Relay 2 (toggle)"
-  BUTTON_3_ACTION_TEXT: "Relay 3 (toggle)"
-  BUTTON_4_ACTION_TEXT: "Relay 4 (toggle)"
-  BUTTON_1_ACTION_FAILSAFE_TEXT: "Relay 1 (API failsafe only)"
-  BUTTON_2_ACTION_FAILSAFE_TEXT: "Relay 2 (API failsafe only)"
-  BUTTON_3_ACTION_FAILSAFE_TEXT: "Relay 3 (API failsafe only)"
-  BUTTON_4_ACTION_FAILSAFE_TEXT: "Relay 4 (API failsafe only)"
-
-  BUTTON_CLICK_MIN_LENGTH: '50'    # The minimum duration the click should last, in msec
-  BUTTON_CLICK_MAX_LENGTH: '350'   # The maximum duration the click should last, in msec
-  BUTTON_MULTI_CLICK_DELAY: '250'  # The time to wait for another click, in msec
-  BUTTON_PRESS_TIMEOUT: '10000'    # Ignore if button is pressed for longer than this time, in msec
-  BUTTON_LONG_PRESS_DELAY: '800'   # The time to wait to consider a long press, in msec
-
-  # Button numbers constants
-  BUTTON_1_ID: '1'
-  BUTTON_2_ID: '2'
-  BUTTON_3_ID: '3'
-  BUTTON_4_ID: '4'
-
 binary_sensor:
   - platform: gpio
     id: bs_button_1_raw
@@ -95,310 +57,118 @@ binary_sensor:
       then:
         - logger.log: "Button 2 (Virtual) was released"
 
-esphome:
-  platformio_options:
-    build_flags:
-      - -D TX_ULTIMATE_EASY_CORE_HW_BUTTONS
+  - platform: gpio
+    id: bs_button_3_raw
+    name: Button 3 (Raw)
+    internal: True
+    pin:
+      number: GPIO34
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_3_press
+    on_release:
+      - script.execute: sc_button_3_release
 
-globals:
-  - id: button_press_button
-    type: uint8_t
-    restore_value: false
-    initial_value: '0'
+  - platform: template
+    id: bs_button_3
+    name: Button 3 (Virtual)
+    internal: False
+    icon: mdi:gesture-tap-box
+    lambda: |-
+      return id(bs_button_3_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 3 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 3 (Virtual) was released"
 
-  - id: button_press_position
-    type: uint8_t
-    restore_value: false
-    initial_value: '0'
+  - platform: gpio
+    id: bs_button_4_raw
+    name: Button 4 (Raw)
+    internal: True
+    pin:
+      number: GPIO39
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_4_press
+    on_release:
+      - script.execute: sc_button_4_release
 
-  - id: button_press_start_time
-    type: uint32_t
-    restore_value: false
-    initial_value: '0'
+  - platform: template
+    id: bs_button_4
+    name: Button 4 (Virtual)
+    internal: False
+    icon: mdi:gesture-tap-box
+    lambda: |-
+      return id(bs_button_4_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 4 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 4 (Virtual) was released"
 
-  - id: click_counter
-    type: uint8_t
-    restore_value: false
-    initial_value: '0'
+  - platform: gpio
+    id: bs_button_5_raw
+    name: Button 5 (Raw)
+    internal: True
+    pin:
+      number: GPIO36
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_5_press
+    on_release:
+      - script.execute: sc_button_5_release
 
-script:
-  - id: !extend boot_initialize
-    then:
-      - script.execute: boot_initialize_buttons
+  - platform: template
+    id: bs_button_5
+    name: Button 5 (Virtual)
+    internal: False
+    icon: mdi:gesture-tap-box
+    lambda: |-
+      return id(bs_button_5_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 5 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 5 (Virtual) was released"
 
-  - id: boot_initialize_buttons
-    mode: restart
-    then:
-      - lambda: |-
-          bs_button_1->publish_state(false);
-          bs_button_1->set_internal(id(gang_count) < 1);
-          sl_button_1_action->set_internal(id(gang_count) < 1);
-          bs_button_2->publish_state(false);
-          bs_button_2->set_internal(id(gang_count) < 2);
-          sl_button_2_action->set_internal(id(gang_count) < 2);
-          bs_button_3->publish_state(false);
-          bs_button_3->set_internal(id(gang_count) < 3);
-          sl_button_3_action->set_internal(id(gang_count) < 3);
-          bs_button_4->publish_state(false);
-          bs_button_4->set_internal(id(gang_count) < 4);
-          sl_button_4_action->set_internal(id(gang_count) < 4);
+  - platform: gpio
+    id: bs_button_6_raw
+    name: Button 6 (Raw)
+    internal: True
+    pin:
+      number: GPIO27
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    on_press:
+      - script.execute: sc_button_6_press
+    on_release:
+      - script.execute: sc_button_6_release
 
-  - id: button_action
-    mode: parallel
-    parameters:
-      button: uint8_t
-      action: string
-      count: uint8_t
-    then:
-      - lambda: |-
-          // Send event to Home Assistant
-          esphome::api::CustomAPIDevice ha_event;
-          ha_event.fire_homeassistant_event("${EVENT_NAME}", {
-            {"device_name", id(tx_device_name).state.c_str()},
-            {"firmware", "${version}"},
-            {"domain", "touch"},
-            {"type", "button"},
-            {"action", action.c_str()},
-            {"button_id", std::to_string(button)},
-            {"count", std::to_string(count)},
-            {"position", std::to_string(id(button_press_position))}
-          });
-          ESP_LOGI("core_hw_buttons", "Button %" PRIu8 " action: '%s'", button, action.c_str());
-          if (action == "click") {
-            switch (button) {
-              case ${BUTTON_1_ID}:
-                bs_button_1_click_event->publish_state(true);
-                break;
-              case ${BUTTON_2_ID}:
-                bs_button_2_click_event->publish_state(true);
-                break;
-              case ${BUTTON_3_ID}:
-                bs_button_3_click_event->publish_state(true);
-                break;
-              case ${BUTTON_4_ID}:
-                bs_button_4_click_event->publish_state(true);
-                break;
-            }
-          } else if (action == "double_click") {
-            switch (button) {
-              case ${BUTTON_1_ID}:
-                bs_button_1_double_click_event->publish_state(true);
-                break;
-              case ${BUTTON_2_ID}:
-                bs_button_2_double_click_event->publish_state(true);
-                break;
-              case ${BUTTON_3_ID}:
-                bs_button_3_double_click_event->publish_state(true);
-                break;
-              case ${BUTTON_4_ID}:
-                bs_button_4_double_click_event->publish_state(true);
-                break;
-            }
-          } else if (action == "long_press") {
-            switch (button) {
-              case ${BUTTON_1_ID}:
-                bs_button_1_long_press_event->publish_state(true);
-                break;
-              case ${BUTTON_2_ID}:
-                bs_button_2_long_press_event->publish_state(true);
-                break;
-              case ${BUTTON_3_ID}:
-                bs_button_3_long_press_event->publish_state(true);
-                break;
-              case ${BUTTON_4_ID}:
-                bs_button_4_long_press_event->publish_state(true);
-                break;
-            }
-          }
-          id(button_press_button) = 0;
-          id(button_press_position) = 0;
-          id(button_press_start_time) = 0;
-          id(click_counter) = 0;
-          buttons_release->execute();
-
-  - id: button_click_event
-    mode: restart
-    parameters:
-      button: uint8_t
-      click_count: uint8_t
-    then:
-      - delay:
-          milliseconds: ${BUTTON_MULTI_CLICK_DELAY}
-      - lambda: |-
-          std::string event_name;
-          if (click_count == 1) event_name = "click";
-          else if (click_count == 2) event_name = "double_click";
-          else event_name = "multiple_click";
-          button_action->execute(button, event_name.c_str(), click_count);
-
-  - id: buttons_release
-    mode: restart
-    then:
-      - lambda: |-
-          std::vector<binary_sensor::BinarySensor*> buttons = {
-            bs_button_1, bs_button_2, bs_button_3, bs_button_4
-          };
-          for (auto* button : buttons) {
-            if (button->state) {
-              button->publish_state(false);
-            }
-          }
-
-  - id: !extend dump_config
-    then:
-      - lambda: |-
-          // Button's actions
-          ESP_LOGCONFIG("core_hw_buttons", "Button%s action%s:",
-                        id(gang_count_plural_suffix).c_str(),
-                        id(gang_count_plural_suffix).c_str());
-          ESP_LOGCONFIG("core_hw_buttons", "  Relay 1: %s", sl_button_1_action->has_state()
-                                                              ? sl_button_1_action->state.c_str()
-                                                              : "Unknown");
-          if (id(gang_count) >= 2)
-            ESP_LOGCONFIG("core_hw_buttons", "  Relay 2: %s", sl_button_2_action->has_state()
-                                                                ? sl_button_2_action->state.c_str()
-                                                                : "Unknown");
-          if (id(gang_count) >= 3)
-            ESP_LOGCONFIG("core_hw_buttons", "  Relay 3: %s", sl_button_3_action->has_state()
-                                                                ? sl_button_3_action->state.c_str()
-                                                                : "Unknown");
-          if (id(gang_count) >= 4)
-            ESP_LOGCONFIG("core_hw_buttons", "  Relay 4: %s", sl_button_4_action->has_state()
-                                                                ? sl_button_4_action->state.c_str()
-                                                                : "Unknown");
-
-  - id: !extend dump_config_list_packages
-    then:
-      - script.wait: dump_config
-      - lambda: |-
-          // Check for requirements
-          #if !defined(TX_ULTIMATE_EASY_CORE)
-            #error "The package TX-Ultimate-Easy-ESPHome_core.yaml is required."
-          #endif
-
-          // Identify itself
-          ESP_LOGCONFIG(ESPHOME_PROJECT_NAME, "  - Core - Hardware - Buttons");
-
-  - id: !extend touch_on_multi_touch_release
-    then:
-      - script.execute: buttons_release
-
-  - id: !extend touch_on_press
-    then:
-      - script.execute:
-          id: touch_on_press_buttons
-          button: !lambda return button;
-          position: !lambda return position;
-
-  - id: touch_on_press_buttons
-    mode: restart
-    parameters:
-      button: uint8_t
-      position: uint8_t
-    then:
-      - lambda: |-
-          id(button_press_start_time) = millis();
-          id(button_press_button) = button;
-          // Update counters
-          if (id(button_press_position) == position) {
-            id(click_counter)++;
-          } else {
-            id(click_counter) = 1;
-            id(button_press_position) = position;
-          }
-          // Update binary sensor
-          switch (button) {
-            case 1:
-              bs_button_1->publish_state(true);
-              break;
-            case 2:
-              bs_button_2->publish_state(true);
-              break;
-            case 3:
-              bs_button_3->publish_state(true);
-              break;
-            case 4:
-              bs_button_4->publish_state(true);
-              break;
-          }
-
-  - id: !extend touch_on_release
-    then:
-      - lambda: |-
-          uint32_t current_time = millis();
-          buttons_release->execute();
-          if (id(button_press_start_time) > 0 and
-              id(button_press_start_time) < current_time) {
-            uint32_t press_duration  = current_time - id(button_press_start_time);
-            // Handle overflow (optional, since it's unlikely to happen here)
-            ESP_LOGI("core_hw_buttons", "Button press duration: %" PRIu32 " ms", press_duration);
-            if (press_duration < ${BUTTON_CLICK_MIN_LENGTH}) {
-              ESP_LOGW("core_hw_buttons", "Ignoring button press (too short)");
-            } else if (press_duration >= ${BUTTON_CLICK_MIN_LENGTH} and
-                        press_duration <= ${BUTTON_CLICK_MAX_LENGTH}) { // Short/normal click
-              button_click_event->execute(id(button_press_button), id(click_counter));
-            } else if (press_duration >= ${BUTTON_LONG_PRESS_DELAY} and press_duration <= ${BUTTON_PRESS_TIMEOUT}) {
-              button_action->execute(id(button_press_button), "long_press", 1);
-            } else if (press_duration > ${BUTTON_PRESS_TIMEOUT}) { // Timeout or invalid
-              ESP_LOGW("core_hw_buttons", "Button press cancelled or timed out after ${BUTTON_PRESS_TIMEOUT} ms");
-            }
-          } else {
-            ESP_LOGW("core_hw_buttons", "Press event timestamp not recorded yet");
-          }
-          id(button_press_start_time) = 0;
-
-  - id: !extend touch_swipe_left
-    then:
-      - script.execute: buttons_release
-
-  - id: !extend touch_swipe_right
-    then:
-      - script.execute: buttons_release
-
-select:
-  - &button_select_action_base
-    id: sl_button_1_action
-    name: Button 1 action
-    platform: template
-    options:
-      - "${BUTTON_ACTION_NONE_TEXT}"
-      - "${BUTTON_1_ACTION_TEXT}"
-      - "${BUTTON_1_ACTION_FAILSAFE_TEXT}"
-    initial_option: "${BUTTON_1_ACTION_TEXT}"
-    optimistic: true
-    restore_value: true
-    internal: true
-    entity_category: config
-    disabled_by_default: false
-    icon: mdi:dip-switch
-
-  - id: sl_button_2_action
-    name: Button 2 action
-    platform: template
-    options:
-      - "${BUTTON_ACTION_NONE_TEXT}"
-      - "${BUTTON_2_ACTION_TEXT}"
-      - "${BUTTON_2_ACTION_FAILSAFE_TEXT}"
-    initial_option: "${BUTTON_2_ACTION_TEXT}"
-    <<: *button_select_action_base
-
-  - id: sl_button_3_action
-    name: Button 3 action
-    platform: template
-    options:
-      - "${BUTTON_ACTION_NONE_TEXT}"
-      - "${BUTTON_3_ACTION_TEXT}"
-      - "${BUTTON_3_ACTION_FAILSAFE_TEXT}"
-    initial_option: "${BUTTON_3_ACTION_TEXT}"
-    <<: *button_select_action_base
-
-  - id: sl_button_4_action
-    name: Button 4 action
-    platform: template
-    options:
-      - "${BUTTON_ACTION_NONE_TEXT}"
-      - "${BUTTON_4_ACTION_TEXT}"
-      - "${BUTTON_4_ACTION_FAILSAFE_TEXT}"
-    initial_option: "${BUTTON_4_ACTION_TEXT}"
-    <<: *button_select_action_base
-...
+  - platform: template
+    id: bs_button_6
+    name: Button 6 (Virtual)
+    internal: False
+    icon: mdi:gesture-tap-box
+    lambda: |-
+      return id(bs_button_6_raw).state;
+    on_press:
+      then:
+        - logger.log: "Button 6 (Virtual) was pressed"
+    on_release:
+      then:
+        - logger.log: "Button 6 (Virtual) was released"
