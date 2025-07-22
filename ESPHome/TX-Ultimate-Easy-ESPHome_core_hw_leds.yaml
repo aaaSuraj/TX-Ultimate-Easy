@@ -43,16 +43,17 @@ globals:
     restore_value: false
 
 light:
-  # These lights are controlling the LEDs on the device
-  - id: light_full
+  - platform: esp32_rmt_led_strip
+    id: light_full
     name: Light - All
-    internal: true
+    internal: True
+    rgb_order: GRB
+    chipset: ws2812
     num_leds: 32
     pin: GPIO13
-    restore_mode: ${LIGHT_FULL_RESTORE_MODE}
-    platform: neopixelbus
-    type: GRB
-    variant: WS2811
+    restore_mode: RESTORE_DEFAULT_OFF
+    max_refresh_rate: 33ms
+    use_psram: True
 
   # Those lights are available based on the model selections
   - &light_partition_with_effects
