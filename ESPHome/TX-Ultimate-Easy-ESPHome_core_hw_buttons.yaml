@@ -1,7 +1,7 @@
 binary_sensor:
   - platform: gpio
     id: bs_button_1_raw
-    name: Button 1 (Raw)
+    name: TX Button 1 (Raw)
     internal: True
     pin:
       number: GPIO0
@@ -16,21 +16,21 @@ binary_sensor:
 
   - platform: template
     id: bs_button_1
-    name: Button 1 (Virtual)
+    name: TX Button 1
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_1_raw).state;
     on_press:
       then:
-        - logger.log: "Button 1 (Virtual) was pressed"
+        - logger.log: "TX Button 1 was pressed"
     on_release:
       then:
-        - logger.log: "Button 1 (Virtual) was released"
+        - logger.log: "TX Button 1 was released"
 
   - platform: gpio
     id: bs_button_2_raw
-    name: Button 2 (Raw)
+    name: TX Button 2 (Raw)
     internal: True
     pin:
       number: GPIO35
@@ -45,21 +45,21 @@ binary_sensor:
 
   - platform: template
     id: bs_button_2
-    name: Button 2 (Virtual)
+    name: TX Button 2
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_2_raw).state;
     on_press:
       then:
-        - logger.log: "Button 2 (Virtual) was pressed"
+        - logger.log: "TX Button 2 was pressed"
     on_release:
       then:
-        - logger.log: "Button 2 (Virtual) was released"
+        - logger.log: "TX Button 2 was released"
 
   - platform: gpio
     id: bs_button_3_raw
-    name: Button 3 (Raw)
+    name: TX Button 3 (Raw)
     internal: True
     pin:
       number: GPIO34
@@ -74,21 +74,21 @@ binary_sensor:
 
   - platform: template
     id: bs_button_3
-    name: Button 3 (Virtual)
+    name: TX Button 3
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_3_raw).state;
     on_press:
       then:
-        - logger.log: "Button 3 (Virtual) was pressed"
+        - logger.log: "TX Button 3 was pressed"
     on_release:
       then:
-        - logger.log: "Button 3 (Virtual) was released"
+        - logger.log: "TX Button 3 was released"
 
   - platform: gpio
     id: bs_button_4_raw
-    name: Button 4 (Raw)
+    name: TX Button 4 (Raw)
     internal: True
     pin:
       number: GPIO39
@@ -103,21 +103,21 @@ binary_sensor:
 
   - platform: template
     id: bs_button_4
-    name: Button 4 (Virtual)
+    name: TX Button 4
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_4_raw).state;
     on_press:
       then:
-        - logger.log: "Button 4 (Virtual) was pressed"
+        - logger.log: "TX Button 4 was pressed"
     on_release:
       then:
-        - logger.log: "Button 4 (Virtual) was released"
+        - logger.log: "TX Button 4 was released"
 
   - platform: gpio
     id: bs_button_5_raw
-    name: Button 5 (Raw)
+    name: TX Button 5 (Raw)
     internal: True
     pin:
       number: GPIO36
@@ -132,21 +132,21 @@ binary_sensor:
 
   - platform: template
     id: bs_button_5
-    name: Button 5 (Virtual)
+    name: TX Button 5
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_5_raw).state;
     on_press:
       then:
-        - logger.log: "Button 5 (Virtual) was pressed"
+        - logger.log: "TX Button 5 was pressed"
     on_release:
       then:
-        - logger.log: "Button 5 (Virtual) was released"
+        - logger.log: "TX Button 5 was released"
 
   - platform: gpio
     id: bs_button_6_raw
-    name: Button 6 (Raw)
+    name: TX Button 6 (Raw)
     internal: True
     pin:
       number: GPIO27
@@ -161,14 +161,14 @@ binary_sensor:
 
   - platform: template
     id: bs_button_6
-    name: Button 6 (Virtual)
+    name: TX Button 6
     internal: False
     icon: mdi:gesture-tap-box
     lambda: |-
       return id(bs_button_6_raw).state;
     on_press:
       then:
-        - logger.log: "Button 6 (Virtual) was pressed"
+        - logger.log: "TX Button 6 was pressed"
     on_release:
       then:
-        - logger.log: "Button 6 (Virtual) was released"
+        - logger.log: "TX Button 6 was released"
